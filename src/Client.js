@@ -49,6 +49,7 @@ class Client extends AsyncEventEmitter {
    * @param {Object} [opts] - Network options.
    * @param {number} [opts.connectTimeout] - Connection timeout in milliseconds.
    * @param {boolean} [opts.logMessages] - Log messages.
+   * @throws Error if there are no messages to send.
    */
   send(host, port, opts) {
     opts = opts || {};

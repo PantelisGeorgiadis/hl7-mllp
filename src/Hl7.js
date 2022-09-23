@@ -510,7 +510,7 @@ class Hl7Message extends AsyncEventEmitter {
    * Creates an acknowledge message from a message.
    * @method
    * @static
-   * @param {Hl7Message} request - HL7 message object.
+   * @param {Hl7Message} message - HL7 message object.
    * @param {Object} [opts] - Acknowledge options.
    * @param {string} [opts.sendingApplication] - Sending application.
    * @param {string} [opts.sendingFacility] - Sending facility.

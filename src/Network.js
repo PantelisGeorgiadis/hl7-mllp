@@ -60,10 +60,10 @@ class Network extends AsyncEventEmitter {
   /**
    * Sends HL7 messages.
    * @method
-   * @param {Array<Hl7Message>|Hl7Message} messages - HL7 messages to send.
+   * @param {Hl7Message|Array<Hl7Message>} messageOrMessages - HL7 message(s) to send.
    */
-  sendMessages(messages) {
-    const msgs = Array.isArray(messages) ? messages : [messages];
+  sendMessages(messageOrMessages) {
+    const msgs = Array.isArray(messageOrMessages) ? messageOrMessages : [messageOrMessages];
     this.messages.push(...msgs);
     this._sendNextMessages();
   }
