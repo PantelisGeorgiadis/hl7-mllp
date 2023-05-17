@@ -1,17 +1,19 @@
-const { Tag, Hl7, Hl7Message } = require('./Hl7');
+const { Hl7, Hl7Message, Tag } = require('./Hl7');
+const { Hl7MessageHandler, Server } = require('./Server');
 const Client = require('./Client');
-const { Server, Hl7MessageHandler } = require('./Server');
+const Statistics = require('./Statistics');
 const log = require('./log');
 const version = require('./version');
 
 const hl7Mllp = {
-  Tag,
+  Client,
   Hl7,
   Hl7Message,
-  Client,
-  Server,
   Hl7MessageHandler,
   log,
+  Server,
+  Statistics,
+  Tag,
   version,
 };
 

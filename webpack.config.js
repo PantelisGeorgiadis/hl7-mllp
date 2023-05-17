@@ -1,6 +1,6 @@
+const { BannerPlugin } = require('webpack');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-const { BannerPlugin } = require('webpack');
 const pkg = require('./package.json');
 
 const rootPath = process.cwd();
@@ -20,7 +20,7 @@ const getBanner = () => {
   return (
     `/*! ${pkg.name} - ${pkg.version} - ` +
     `${getCurrentDate()} ` +
-    `| (c) 2022 ${pkg.author} | ${pkg.homepage} */`
+    `| (c) 2022-2023 ${pkg.author} | ${pkg.homepage} */`
   );
 };
 

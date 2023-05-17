@@ -1,12 +1,12 @@
-const Network = require('./Network');
 const { Hl7Message } = require('./Hl7');
+const Network = require('./Network');
+const Statistics = require('./Statistics');
 const log = require('./log');
 
 const AsyncEventEmitter = require('async-eventemitter');
 const net = require('net');
 
 //#region Hl7MessageHandler
-/* c8 ignore start */
 class Hl7MessageHandler extends Network {
   /**
    * Creates an instance of Hl7MessageHandler.
@@ -35,7 +35,6 @@ class Hl7MessageHandler extends Network {
     callback(Hl7Message.createAcknowledgeMessage(message));
   }
 }
-/* c8 ignore stop */
 //#endregion
 
 //#region Server
@@ -50,6 +49,7 @@ class Server extends AsyncEventEmitter {
     this.handler = { class: handlerClass };
     this.server = undefined;
     this.clients = [];
+    this.statistics = new Statistics();
   }
 
   /**
@@ -68,6 +68,9 @@ class Server extends AsyncEventEmitter {
       log.info(`Client connecting from ${socket.remoteAddress}:${socket.remotePort}`);
       const client = new this.handler.class(socket, opts);
       client.connected = true;
+      client.on('close', () => {
+        this.statistics.addFromOtherStatistics(client.getStatistics());
+      });
       this.clients.push(client);
 
       this.clients = this.clients.filter((item) => item.connected);
@@ -81,6 +84,15 @@ class Server extends AsyncEventEmitter {
       this.emit('networkError', err);
     });
     this.server.listen(port);
+  }
+
+  /**
+   * Gets network statistics.
+   * @method
+   * @returns {Statistics} Network statistics.
+   */
+  getStatistics() {
+    return this.statistics;
   }
 
   /**

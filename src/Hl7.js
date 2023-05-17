@@ -7,11 +7,13 @@ class Tag {
    * Creates an instance of Tag.
    * @constructor
    * @param {string} tag - Tag that represents a path within an HL7 message.
+   * @throws Error if the tag does not contain at least the segment information or
+   * contains more than four parts.
    */
   constructor(tag) {
     this.tag = tag || '';
     if (this.tag.length < 3) {
-      throw Error('Tag needs to contain at least the segment information');
+      throw new Error('Tag needs to contain at least the segment information');
     }
 
     this.segment = this.tag.substring(0, 3).toUpperCase();
@@ -24,7 +26,7 @@ class Tag {
 
     const parts = this.tag.split('.');
     if (parts.length > 4) {
-      throw Error('Tag should not contain more than four parts');
+      throw new Error('Tag should not contain more than four parts');
     }
 
     this.field = 0;
@@ -179,6 +181,7 @@ class Hl7 {
    * @param {Tag} tag - Tag.
    * @param {string} defaultValue - Default value.
    * @returns {string} Value or default.
+   * @throws Error if the tag is invalid for get operation.
    */
   get(tag, defaultValue) {
     let value = undefined;
@@ -189,7 +192,7 @@ class Hl7 {
     } else if (tag.getField() > 0) {
       value = this._getField(tag);
     } else {
-      throw Error('Invalid tag for get operation');
+      throw new Error(`Invalid tag for get operation [${tag.toString()}]`);
     }
 
     return value !== undefined ? value : defaultValue;
@@ -200,6 +203,7 @@ class Hl7 {
    * @method
    * @param {Tag} tag - Tag.
    * @param {string} value - Value.
+   * @throws Error if the tag is invalid for set operation.
    */
   set(tag, value) {
     if (tag.getSubComponent() > 0) {
@@ -209,7 +213,7 @@ class Hl7 {
     } else if (tag.getField() > 0) {
       this._setField(tag, value);
     } else {
-      throw Error('Invalid tag for set operation');
+      throw new Error(`Invalid tag for set operation [${tag.toString()}]`);
     }
   }
 
@@ -336,7 +340,7 @@ class Hl7 {
    * @method
    * @private
    * @param {Tag} tag - Tag.
-   * @param {Tag} value - Value.
+   * @param {string} value - Value.
    */
   _setField(tag, value) {
     let segment = this._getSegment(tag);
@@ -391,7 +395,7 @@ class Hl7 {
    * @method
    * @private
    * @param {Tag} tag - Tag.
-   * @param {Tag} value - Value.
+   * @param {string} value - Value.
    */
   _setComponent(tag, value) {
     let field = this._getField(tag);
@@ -434,7 +438,7 @@ class Hl7 {
    * @method
    * @private
    * @param {Tag} tag - Tag.
-   * @param {Tag} value - Value.
+   * @param {string} value - Value.
    */
   _setSubComponent(tag, value) {
     let component = this._getComponent(tag);
@@ -503,6 +507,7 @@ class Hl7Message extends AsyncEventEmitter {
    */
   getMessageControlId() {
     const msaCount = this.hl7.countSegments('MSA');
+
     return msaCount > 0 ? this.hl7.get(new Tag('MSA[0].2')) : this.hl7.get(new Tag('MSH[0].10'));
   }
 
@@ -573,5 +578,5 @@ class Hl7Message extends AsyncEventEmitter {
 //#endregion
 
 //#region Exports
-module.exports = { Tag, Hl7, Hl7Message };
+module.exports = { Hl7, Hl7Message, Tag };
 //#endregion

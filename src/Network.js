@@ -1,8 +1,31 @@
 const { Hl7Message } = require('./Hl7');
+const Statistics = require('./Statistics');
 const log = require('./log');
 
 const AsyncEventEmitter = require('async-eventemitter');
-const { SmartBuffer } = require('smart-buffer');
+
+//#region Constants
+/**
+ * Vertical tab character.
+ * @constant {string}
+ */
+const Vt = String.fromCharCode(0x0b);
+Object.freeze(Vt);
+
+/**
+ * Field separator character.
+ * @constant {string}
+ */
+const Fs = String.fromCharCode(0x1c);
+Object.freeze(Fs);
+
+/**
+ * Carriage return character.
+ * @constant {string}
+ */
+const Cr = String.fromCharCode(0x0d);
+Object.freeze(Cr);
+//#endregion
 
 //#region Network
 class Network extends AsyncEventEmitter {
@@ -25,6 +48,7 @@ class Network extends AsyncEventEmitter {
     this.logMessages = opts.logMessages || false;
     this.connected = false;
     this.logId = socket.remoteAddress || '';
+    this.statistics = new Statistics();
 
     this.socket.setTimeout(this.connectTimeout);
     this.socket.on('connect', () => {
@@ -37,6 +61,7 @@ class Network extends AsyncEventEmitter {
     });
     this.socket.on('data', (data) => {
       messageProcessor.process(data);
+      this.statistics.addBytesReceived(data.length);
     });
     this.socket.on('error', (err) => {
       this.connected = false;
@@ -66,6 +91,15 @@ class Network extends AsyncEventEmitter {
     const msgs = Array.isArray(messageOrMessages) ? messageOrMessages : [messageOrMessages];
     this.messages.push(...msgs);
     this._sendNextMessages();
+  }
+
+  /**
+   * Gets network statistics.
+   * @method
+   * @returns {Statistics} Network statistics.
+   */
+  getStatistics() {
+    return this.statistics;
   }
 
   //#region Private Methods
@@ -104,12 +138,9 @@ class Network extends AsyncEventEmitter {
         }`
       );
 
-      const hl7Bytes = new TextEncoder().encode(message.toString());
-      const startBlock = [0x0b];
-      this.socket.write(Buffer.from(startBlock));
-      this.socket.write(hl7Bytes);
-      const endBlock = [0x1c, 0x0d];
-      this.socket.write(Buffer.from(endBlock));
+      const data = Vt + message.toString() + Fs + Cr;
+      this.socket.write(data);
+      this.statistics.addBytesSent(data.length);
     } catch (err) {
       log.error(`${this.logId} -> Error sending HL7 message: ${err.message}`);
       this.emit('networkError', err);
@@ -138,6 +169,7 @@ class Network extends AsyncEventEmitter {
       if (messageToAcknowledge) {
         messageToAcknowledge.raiseAcknowledgeEvent(message);
         messageToAcknowledge.raiseDoneEvent();
+
         return;
       }
 
@@ -161,6 +193,8 @@ class Hl7MessageProcessor extends AsyncEventEmitter {
    */
   constructor() {
     super();
+
+    this.hl7Message = '';
   }
 
   /**
@@ -169,30 +203,27 @@ class Hl7MessageProcessor extends AsyncEventEmitter {
    * @param {Buffer} data - The received data.
    */
   process(data) {
-    const inBuffer = SmartBuffer.fromBuffer(data, 'ascii');
-    const outBuffer = SmartBuffer.fromOptions({
-      encoding: 'ascii',
-    });
+    // Accumulate received data
+    this.hl7Message += data.toString();
 
-    let ib = 0x00;
-    for (; inBuffer.readUInt8() !== 0x0b; );
-    for (;;) {
-      if (ib === 0x1c) {
-        ib = inBuffer.readUInt8();
-        if (ib === 0x0d) {
-          break;
-        }
-        outBuffer.writeUInt8(0x1c);
-        outBuffer.writeUInt8(ib);
-      } else {
-        ib = inBuffer.readUInt8();
-        if (ib !== 0x1c) {
-          outBuffer.writeUInt8(ib);
-        }
+    // Find start of MLLP frame, a VT character
+    const startOfMllpEnvelope = this.hl7Message.indexOf(Vt);
+    if (startOfMllpEnvelope >= 0) {
+      // Look for the end of the frame, a FS and CR character
+      const endOfMllpEnvelope = this.hl7Message.indexOf(Fs + Cr);
+
+      // End of block received
+      if (endOfMllpEnvelope >= startOfMllpEnvelope) {
+        const hl7Message = this.hl7Message.substring(
+          startOfMllpEnvelope + 1 /* Skip VT */,
+          endOfMllpEnvelope - startOfMllpEnvelope
+        );
+
+        // Emit the received message
+        this.emit('message', hl7Message);
+        this.hl7Message = '';
       }
     }
-    const hl7 = new TextDecoder().decode(outBuffer.toBuffer());
-    this.emit('message', hl7);
   }
 }
 //#endregion

@@ -1,4 +1,4 @@
-const { Tag, Hl7, Hl7Message } = require('./../src/Hl7');
+const { Hl7, Hl7Message, Tag } = require('./../src/Hl7');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -56,29 +56,37 @@ describe('Hl7', () => {
   });
 
   it('should correctly set and get a Tag for an Hl7 object and Hl7Message object', () => {
-    const hl7 = new Hl7();
-    const hl7Message = new Hl7Message();
-    const segmentLen = getRandomInteger(2, 16);
-    const fieldLen = getRandomInteger(2, 16);
-    const componentLen = getRandomInteger(2, 16);
-    const subComponentLen = getRandomInteger(2, 16);
+    const hl7 = Hl7.parse(
+      'MSH|^~&|SENDINGAPP|SENDINGFACILITY|RECEIVINGAPP|RECEIVINGFACILITY|200001010000||ADT|1234567890|D|2.2|'
+    );
+    const hl7Message = new Hl7Message(hl7);
+    const segmentLen = getRandomInteger(2, 8);
+    const fieldLen = getRandomInteger(2, 8);
+    const componentLen = getRandomInteger(2, 8);
+    const subComponentLen = getRandomInteger(2, 8);
 
-    const segments = ['MSH', 'EVN', 'OBR', 'OBX', 'ORC', 'PID'];
+    const segments = ['EVN', 'OBR', 'OBX', 'ORC', 'PID'];
     const randomSegment = segments[Math.floor(Math.random() * segments.length)];
 
     for (let i = 1; i < segmentLen; i++) {
       for (let j = 1; j < fieldLen; j++) {
         for (let k = 1; k < componentLen; k++) {
           for (let l = 1; l < subComponentLen; l++) {
-            const strLen = getRandomInteger(1, 64);
+            const strLen = getRandomInteger(4, 64);
             const randomTag = new Tag(`${randomSegment}[${i}].${j}.${k}.${l}`);
             const randomString = getRandomString(strLen);
 
             hl7.set(randomTag, randomString);
             hl7Message.set(randomTag, randomString);
 
-            expect(hl7.get(randomTag)).to.be.eq(randomString);
-            expect(hl7Message.get(randomTag)).to.be.eq(randomString);
+            const hl7String = hl7.toString();
+            const hl7MessageString = hl7Message.toString();
+
+            const hl7Parsed = Hl7.parse(hl7String);
+            const hl7MessageParsed = new Hl7Message(hl7MessageString);
+
+            expect(hl7Parsed.get(randomTag)).to.be.eq(randomString);
+            expect(hl7MessageParsed.get(randomTag)).to.be.eq(randomString);
           }
         }
       }

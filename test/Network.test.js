@@ -1,6 +1,6 @@
-const Client = require('./../src/Client');
 const { Hl7Message } = require('./../src/Hl7');
-const { Server, Hl7MessageHandler } = require('./../src/Server');
+const { Hl7MessageHandler, Server } = require('./../src/Server');
+const Client = require('./../src/Client');
 const log = require('./../src/log');
 
 const chai = require('chai');
@@ -29,7 +29,7 @@ describe('Network', () => {
     expect(() => {
       const client2 = new Client();
       const message2 = new Hl7Message(
-        'MSH|^~&|EPIC|EPICADT|SMS|SMSADT|199912271408|CHARRIS|ADT^A04|123456|D|2.5|'
+        'MSH|^~&|SENDINGAPP|SENDINGFACILITY|RECEIVINGAPP|RECEIVINGFACILITY|200001010000||ADT|1234567890|D|2.2|'
       );
       client2.addMessage(message2);
       client2.clearMessages();

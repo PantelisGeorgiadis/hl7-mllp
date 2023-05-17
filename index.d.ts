@@ -1,6 +1,6 @@
-import AsyncEventEmitter from 'async-eventemitter';
 import { Logger } from 'winston';
 import { Socket } from 'net';
+import AsyncEventEmitter from 'async-eventemitter';
 
 declare class Tag {
   /**
@@ -137,6 +137,48 @@ declare class Network extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
   sendMessages(messages: Array<Hl7Message> | Hl7Message): void;
 }
 
+declare class Statistics {
+  /**
+   * Creates an instance of Statistics.
+   */
+  constructor();
+
+  /**
+   * Gets the received bytes.
+   */
+  getBytesReceived(): number;
+
+  /**
+   * Gets the sent bytes.
+   */
+  getBytesSent(): number;
+
+  /**
+   * Adds bytes to the received bytes.
+   */
+  addBytesReceived(bytes: number): void;
+
+  /**
+   * Adds bytes to the sent bytes.
+   */
+  addBytesSent(bytes: number): void;
+
+  /**
+   * Adds values from other statistics.
+   */
+  addFromOtherStatistics(statistics: Statistics): void;
+
+  /**
+   * Resets received and sent bytes.
+   */
+  reset(): void;
+
+  /**
+   * Gets the statistics description.
+   */
+  toString(): string;
+}
+
 declare class Hl7MessageHandler extends Network {
   /**
    * Message received.
@@ -160,6 +202,11 @@ declare class Server extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
       logMessages?: boolean;
     }
   ): void;
+
+  /**
+   * Gets network statistics.
+   */
+  getStatistics(): Statistics;
 
   /**
    * Closes the server.
@@ -194,6 +241,11 @@ declare class Client extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
       logMessages?: boolean;
     }
   ): void;
+
+  /**
+   * Gets network statistics.
+   */
+  getStatistics(): Statistics;
 }
 
 /**
@@ -206,4 +258,4 @@ declare const log: Logger;
  */
 declare const version: string;
 
-export { Tag, Hl7, Hl7Message, Client, Server, Hl7MessageHandler, log, version };
+export { Tag, Hl7, Hl7Message, Client, Server, Hl7MessageHandler, Statistics, log, version };

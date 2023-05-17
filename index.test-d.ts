@@ -1,5 +1,15 @@
 import { expectType, expectError } from 'tsd';
-import { Tag, Hl7, Hl7Message, Client, Server, Hl7MessageHandler, log, version } from '.';
+import {
+  Tag,
+  Hl7,
+  Hl7Message,
+  Client,
+  Server,
+  Hl7MessageHandler,
+  Statistics,
+  log,
+  version,
+} from '.';
 
 // log
 expectType<typeof log>(log.error('error'));
@@ -69,6 +79,16 @@ expectType<string>(hl7Message.getMessageControlId());
 expectError(hl7Message.toString(1));
 expectType<string>(hl7Message.toString());
 
+// Statistics
+const statistics = new Statistics();
+expectType<number>(statistics.getBytesReceived());
+expectType<number>(statistics.getBytesSent());
+expectError(statistics.addBytesReceived('1'));
+expectError(statistics.addBytesSent('1'));
+expectError(statistics.addFromOtherStatistics('1'));
+expectType<void>(statistics.reset());
+expectType<string>(statistics.toString());
+
 // Server
 class Hl7MessageHandlerTest extends Hl7MessageHandler {
   onMessage(message: Hl7Message, callback: (message: Hl7Message) => void) {}
@@ -82,6 +102,7 @@ expectError(server.listen('2104'));
 expectError(server.listen(2104, '1'));
 expectType<void>(server.listen(2104));
 expectType<void>(server.close());
+expectType<Statistics>(server.getStatistics());
 
 // Client
 expectType<Client>(new Client());
@@ -92,6 +113,7 @@ expectError(client.addMessage('1'));
 expectType<void>(
   client.addMessage(new Hl7Message('MSH|^~&|||||200001010000||ADT|1234567890|D|2.2|'))
 );
+expectType<Statistics>(client.getStatistics());
 expectError(client.send('1'));
 expectError(client.send('1', '2'));
 expectError(client.send('1', '2', 3));

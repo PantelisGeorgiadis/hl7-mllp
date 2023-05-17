@@ -1,5 +1,6 @@
-const Network = require('./Network');
 const { Hl7Message } = require('./Hl7');
+const Network = require('./Network');
+const Statistics = require('./Statistics');
 const log = require('./log');
 
 const AsyncEventEmitter = require('async-eventemitter');
@@ -14,6 +15,7 @@ class Client extends AsyncEventEmitter {
   constructor() {
     super();
     this.messages = [];
+    this.statistics = new Statistics();
   }
 
   /**
@@ -76,8 +78,18 @@ class Client extends AsyncEventEmitter {
       this.emit('networkError', err);
     });
     network.on('close', () => {
+      this.statistics.addFromOtherStatistics(network.getStatistics());
       this.emit('closed');
     });
+  }
+
+  /**
+   * Gets network statistics.
+   * @method
+   * @returns {Statistics} Network statistics.
+   */
+  getStatistics() {
+    return this.statistics;
   }
 }
 //#endregion
