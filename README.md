@@ -1,4 +1,4 @@
-[![NPM version][npm-version-image]][npm-url] [![build][build-image]][build-url] [![MIT License][license-image]][license-url] 
+[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![build][build-image]][build-url] [![MIT License][license-image]][license-url] 
 
 # hl7-mllp
 HL7 Minimum Lower Layer Protocol (MLLP) implementation for Node.js.
@@ -67,6 +67,7 @@ hl7-mllp is released under the MIT License.
 
 [npm-url]: https://npmjs.org/package/hl7-mllp
 [npm-version-image]: https://img.shields.io/npm/v/hl7-mllp.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dm/hl7-mllp.svg?style=flat
 
 [build-url]: https://github.com/PantelisGeorgiadis/hl7-mllp/actions/workflows/build.yml
 [build-image]: https://github.com/PantelisGeorgiadis/hl7-mllp/actions/workflows/build.yml/badge.svg?branch=master

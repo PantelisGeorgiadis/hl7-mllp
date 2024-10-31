@@ -519,6 +519,7 @@ class Hl7Message extends AsyncEventEmitter {
    * @param {Object} [opts] - Acknowledge options.
    * @param {string} [opts.sendingApplication] - Sending application.
    * @param {string} [opts.sendingFacility] - Sending facility.
+   * @param {string} [opts.error] - Application error.
    * @returns {Hl7Message} Acknowledge HL7 message object.
    * @throws Error if message is not an instance of Hl7Message.
    */
@@ -527,6 +528,7 @@ class Hl7Message extends AsyncEventEmitter {
       throw new Error('Message should be an instance of Hl7Message');
     }
     opts = opts || {};
+    const noError = !opts.error || !opts.error.trim();
 
     const receivingApplication = message.get(new Tag('MSH[0].3'), '');
     const receivingFacility = message.get(new Tag('MSH[0].4'), '');
@@ -540,10 +542,13 @@ class Hl7Message extends AsyncEventEmitter {
     ackMessage.set(new Tag('MSH[0].6'), receivingFacility);
     ackMessage.set(new Tag('MSH[0].7'), moment(new Date()).format('YYYYMMDDHHmmss'));
     ackMessage.set(new Tag('MSH[0].9'), 'ACK');
+    ackMessage.set(new Tag('MSH[0].10'), messageControlId);
+    ackMessage.set(new Tag('MSH[0].11'), 'P');
     ackMessage.set(new Tag('MSH[0].12'), versionId);
 
-    ackMessage.set(new Tag('MSA[0].1'), 'AA');
+    ackMessage.set(new Tag('MSA[0].1'), noError ? 'AA' : 'AE');
     ackMessage.set(new Tag('MSA[0].2'), messageControlId);
+    ackMessage.set(new Tag('MSA[0].3'), noError ? '' : opts.error);
 
     return ackMessage;
   }

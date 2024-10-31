@@ -31,8 +31,9 @@ class Hl7MessageHandler extends Network {
    * @param {function(Hl7Message)} callback - Message acknowledge callback function.
    */
   onMessage(message, callback) {
-    log.error('onMessage method must be implemented');
-    callback(Hl7Message.createAcknowledgeMessage(message));
+    const error = 'onMessage method must be implemented';
+    log.error(error);
+    callback(Hl7Message.createAcknowledgeMessage(message, { error }));
   }
 }
 //#endregion
@@ -70,6 +71,10 @@ class Server extends AsyncEventEmitter {
       client.connected = true;
       client.on('close', () => {
         this.statistics.addFromOtherStatistics(client.getStatistics());
+      });
+      client.on('networkError', (err) => {
+        socket.end();
+        this.emit('networkError', err);
       });
       this.clients.push(client);
 

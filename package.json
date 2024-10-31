@@ -1,6 +1,6 @@
 {
   "name": "hl7-mllp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "HL7 Minimum Lower Layer Protocol (MLLP) implementation for Node.js",
   "main": "build/hl7-mllp.min.js",
   "module": "build/hl7-mllp.min.js",
@@ -41,25 +41,25 @@
   "dependencies": {
     "async-eventemitter": "^0.2.4",
     "moment": "^2.30.1",
-    "winston": "^3.11.0"
+    "winston": "^3.15.0"
   },
   "devDependencies": {
     "@types/async-eventemitter": "^0.2.4",
-    "@types/node": "^20.10.6",
-    "c8": "^8.0.1",
-    "chai": "^4.3.8",
+    "@types/node": "^22.8.5",
+    "c8": "^9.1.0",
+    "chai": "^4.3.10",
     "docdash": "^2.0.2",
-    "eslint": "^8.56.0",
-    "jsdoc": "^4.0.2",
-    "mocha": "^10.2.0",
-    "open-cli": "^8.0.0",
-    "prettier": "^3.1.1",
+    "eslint": "^8.57.0",
+    "jsdoc": "^4.0.4",
+    "mocha": "^10.7.3",
+    "open-cli": "^7.2.0",
+    "prettier": "^3.3.3",
     "shx": "^0.3.3",
     "terser-webpack-plugin": "^5.3.10",
     "ts-node": "^10.9.2",
-    "tsd": "^0.30.2",
-    "typescript": "^5.3.3",
-    "webpack": "^5.89.0",
+    "tsd": "^0.31.2",
+    "typescript": "^5.6.3",
+    "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"
   }
 }

@@ -95,6 +95,7 @@ declare class Hl7Message extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
     opts?: {
       sendingApplication?: string;
       sendingFacility?: string;
+      error?: string;
     }
   ): Hl7Message;
 
