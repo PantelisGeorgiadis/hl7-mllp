@@ -1,6 +1,6 @@
 {
   "name": "hl7-mllp",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "HL7 Minimum Lower Layer Protocol (MLLP) implementation for Node.js",
   "main": "build/hl7-mllp.min.js",
   "module": "build/hl7-mllp.min.js",
@@ -22,7 +22,7 @@
     "test:node": "mocha test/**/*.test.js",
     "test:types": "tsd",
     "test": "npm run test:types && npm run test:node",
-    "lint": "eslint -c .eslintrc.json --fix src && prettier --tab-width 2 --single-quote true --print-width 100 --use-tabs false --trailing-comma es5 --write src/**/*.js test/**/*.js examples/**/*.{js,ts} *.ts"
+    "lint": "eslint -c .eslintrc.json --fix src && prettier --config .prettierrc.json --write src/**/*.js test/**/*.js examples/**/*.{js,ts} *.ts"
   },
   "repository": {
     "type": "git",
@@ -41,25 +41,25 @@
   "dependencies": {
     "async-eventemitter": "^0.2.4",
     "moment": "^2.30.1",
-    "winston": "^3.15.0"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/async-eventemitter": "^0.2.4",
-    "@types/node": "^22.8.5",
+    "@types/node": "^22.13.4",
     "c8": "^9.1.0",
     "chai": "^4.3.10",
     "docdash": "^2.0.2",
     "eslint": "^8.57.0",
     "jsdoc": "^4.0.4",
-    "mocha": "^10.7.3",
+    "mocha": "^11.1.0",
     "open-cli": "^7.2.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.2",
     "shx": "^0.3.3",
-    "terser-webpack-plugin": "^5.3.10",
+    "terser-webpack-plugin": "^5.3.11",
     "ts-node": "^10.9.2",
     "tsd": "^0.31.2",
-    "typescript": "^5.6.3",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   }
 }

@@ -42,5 +42,6 @@ describe('Statistics', () => {
     statistics1.addFromOtherStatistics(statistics2);
     expect(statistics1.getBytesReceived()).to.be.eq(40);
     expect(statistics1.getBytesSent()).to.be.eq(60);
+    expect(statistics1.toString()).to.be.a('string');
   });
 });

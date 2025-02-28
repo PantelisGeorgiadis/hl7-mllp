@@ -121,7 +121,11 @@ declare class Hl7Message extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
 }
 
 declare class Network extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+  /**
+   * Underlying socket.
+   */
   socket: Socket;
+
   /**
    * Creates an instance of Network.
    */

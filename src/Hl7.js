@@ -7,7 +7,7 @@ class Tag {
    * Creates an instance of Tag.
    * @constructor
    * @param {string} tag - Tag that represents a path within an HL7 message.
-   * @throws Error if the tag does not contain at least the segment information or
+   * @throws {Error} If the tag does not contain at least the segment information or
    * contains more than four parts.
    */
   constructor(tag) {
@@ -181,7 +181,7 @@ class Hl7 {
    * @param {Tag} tag - Tag.
    * @param {string} defaultValue - Default value.
    * @returns {string} Value or default.
-   * @throws Error if the tag is invalid for get operation.
+   * @throws {Error} If the tag is invalid for get operation.
    */
   get(tag, defaultValue) {
     let value = undefined;
@@ -203,7 +203,7 @@ class Hl7 {
    * @method
    * @param {Tag} tag - Tag.
    * @param {string} value - Value.
-   * @throws Error if the tag is invalid for set operation.
+   * @throws {Error} If the tag is invalid for set operation.
    */
   set(tag, value) {
     if (tag.getSubComponent() > 0) {
@@ -521,7 +521,7 @@ class Hl7Message extends AsyncEventEmitter {
    * @param {string} [opts.sendingFacility] - Sending facility.
    * @param {string} [opts.error] - Application error.
    * @returns {Hl7Message} Acknowledge HL7 message object.
-   * @throws Error if message is not an instance of Hl7Message.
+   * @throws {Error} If message is not an instance of Hl7Message.
    */
   static createAcknowledgeMessage(message, opts) {
     if (!(message instanceof Hl7Message)) {

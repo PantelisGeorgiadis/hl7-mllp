@@ -43,6 +43,7 @@ describe('Hl7', () => {
     expect(tag3.getField()).to.be.eq(4);
     expect(tag3.getComponent()).to.be.eq(0);
     expect(tag3.getSubComponent()).to.be.eq(0);
+    expect(tag3.toString()).to.be.a('string');
   });
 
   it('should throw in case of constructing an invalid Tag', () => {
