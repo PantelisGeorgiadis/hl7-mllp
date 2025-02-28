@@ -121,6 +121,7 @@ declare class Hl7Message extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
 }
 
 declare class Network extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+  socket: Socket;
   /**
    * Creates an instance of Network.
    */
@@ -129,6 +130,7 @@ declare class Network extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
     opts?: {
       connectTimeout?: number;
       logMessages?: boolean;
+      [key: string]: any;
     }
   );
 
@@ -201,6 +203,7 @@ declare class Server extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
     opts?: {
       connectTimeout?: number;
       logMessages?: boolean;
+      [key: string]: any;
     }
   ): void;
 
