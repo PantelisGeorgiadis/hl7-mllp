@@ -10,9 +10,10 @@ import {
   log,
   version,
 } from '.';
+import { Logger } from 'loglevel';
 
 // log
-expectType<typeof log>(log.error('error'));
+expectType<Logger>(log);
 
 // version
 expectType<string>(version);

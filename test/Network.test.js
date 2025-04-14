@@ -26,7 +26,7 @@ class ApplicationErrorAcknowledgementHl7MessageHandler extends Hl7MessageHandler
 
 describe('Network', () => {
   before(() => {
-    log.level = 'error';
+    log.setLevel('error');
   });
 
   it('should throw in case of bad client input', () => {
@@ -46,13 +46,16 @@ describe('Network', () => {
     }).to.throw();
   });
 
-  it('should correctly send an HL7 message and receive a positive acknowledgement', () => {
+  it('should correctly send an HL7 message and receive a positive acknowledgement', (done) => {
     const expectedMcId = `${Math.floor(Math.random() * 1000000000)}`;
     let ack = false;
     let mcId = undefined;
     let aa = undefined;
 
     const server = new Server(PositiveAcknowledgementHl7MessageHandler);
+    server.on('networkError', (e) => {
+      throw e;
+    });
     server.listen(2101);
 
     const client = new Client();
@@ -71,17 +74,24 @@ describe('Network', () => {
       expect(mcId).to.be.eq(expectedMcId);
       expect(aa).to.be.eq('AA');
       server.close();
+      done();
+    });
+    client.on('networkError', (e) => {
+      throw e;
     });
     client.send('127.0.0.1', 2101);
   });
 
-  it('should correctly send an HL7 message and receive an acknowledgement with application error', () => {
+  it('should correctly send an HL7 message and receive an acknowledgement with application error', (done) => {
     const expectedMcId = `${Math.floor(Math.random() * 1000000000)}`;
     let ack = false;
     let mcId = undefined;
     let ae = undefined;
 
     const server = new Server(ApplicationErrorAcknowledgementHl7MessageHandler);
+    server.on('networkError', (e) => {
+      throw e;
+    });
     server.listen(2102);
 
     const client = new Client();
@@ -100,6 +110,10 @@ describe('Network', () => {
       expect(mcId).to.be.eq(expectedMcId);
       expect(ae).to.be.eq('AE');
       server.close();
+      done();
+    });
+    client.on('networkError', (e) => {
+      throw e;
     });
     client.send('127.0.0.1', 2102);
   });

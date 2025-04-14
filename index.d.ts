@@ -1,4 +1,4 @@
-import { Logger } from 'winston';
+import { Logger } from 'loglevel';
 import { Socket } from 'net';
 import AsyncEventEmitter from 'async-eventemitter';
 

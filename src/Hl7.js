@@ -1,4 +1,4 @@
-const moment = require('moment');
+const dayjs = require('dayjs');
 const AsyncEventEmitter = require('async-eventemitter');
 
 //#region Tag
@@ -540,7 +540,7 @@ class Hl7Message extends AsyncEventEmitter {
     ackMessage.set(new Tag('MSH[0].4'), opts.sendingFacility || '');
     ackMessage.set(new Tag('MSH[0].5'), receivingApplication);
     ackMessage.set(new Tag('MSH[0].6'), receivingFacility);
-    ackMessage.set(new Tag('MSH[0].7'), moment(new Date()).format('YYYYMMDDHHmmss'));
+    ackMessage.set(new Tag('MSH[0].7'), dayjs(new Date()).format('YYYYMMDDHHmmss'));
     ackMessage.set(new Tag('MSH[0].9'), 'ACK');
     ackMessage.set(new Tag('MSH[0].10'), messageControlId);
     ackMessage.set(new Tag('MSH[0].11'), 'P');
