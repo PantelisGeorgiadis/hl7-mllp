@@ -20,7 +20,7 @@ const getBanner = () => {
   return (
     `/*! ${pkg.name} - ${pkg.version} - ` +
     `${getCurrentDate()} ` +
-    `| (c) 2022-2025 ${pkg.author} | ${pkg.homepage} */`
+    `| (c) 2022-2026 ${pkg.author} | ${pkg.homepage} */`
   );
 };
 

@@ -44,4 +44,11 @@ describe('Statistics', () => {
     expect(statistics1.getBytesSent()).to.be.eq(60);
     expect(statistics1.toString()).to.be.a('string');
   });
+
+  it('should correctly format zero bytes in toString()', () => {
+    const statistics = new Statistics();
+    const str = statistics.toString();
+    expect(str).to.be.a('string');
+    expect(str).to.include('0 Bytes');
+  });
 });
