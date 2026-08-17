@@ -1,5 +1,5 @@
 const dayjs = require('dayjs');
-const AsyncEventEmitter = require('async-eventemitter');
+const AsyncEventEmitter2 = require('async-event-emitter2');
 
 //#region Tag
 class Tag {
@@ -459,7 +459,7 @@ class Hl7 {
 //#endregion
 
 //#region Hl7Message
-class Hl7Message extends AsyncEventEmitter {
+class Hl7Message extends AsyncEventEmitter2 {
   /**
    * Creates an instance of Hl7Message.
    * @constructor

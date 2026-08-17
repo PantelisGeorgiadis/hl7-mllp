@@ -1,6 +1,6 @@
 import { Logger } from 'loglevel';
 import { Socket } from 'net';
-import AsyncEventEmitter from 'async-eventemitter';
+import AsyncEventEmitter2 from 'async-event-emitter2';
 
 declare class Tag {
   /**
@@ -81,7 +81,7 @@ declare class Hl7 {
   toString(segmentSeparator?: string): string;
 }
 
-declare class Hl7Message extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+declare class Hl7Message extends AsyncEventEmitter2<AsyncEventEmitter2.EventMap> {
   /**
    * Creates an instance of Hl7Message.
    */
@@ -120,7 +120,7 @@ declare class Hl7Message extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
   toString(segmentSeparator?: string): string;
 }
 
-declare class Network extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+declare class Network extends AsyncEventEmitter2<AsyncEventEmitter2.EventMap> {
   /**
    * Underlying socket.
    */
@@ -193,7 +193,7 @@ declare class Hl7MessageHandler extends Network {
   onMessage(message: Hl7Message, callback: (message: Hl7Message) => void): void;
 }
 
-declare class Server extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+declare class Server extends AsyncEventEmitter2<AsyncEventEmitter2.EventMap> {
   /**
    * Creates an instance of Server.
    */
@@ -222,7 +222,7 @@ declare class Server extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
   close(): void;
 }
 
-declare class Client extends AsyncEventEmitter<AsyncEventEmitter.EventMap> {
+declare class Client extends AsyncEventEmitter2<AsyncEventEmitter2.EventMap> {
   /**
    * Creates an instance of Client.
    */

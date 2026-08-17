@@ -1,6 +1,6 @@
 {
   "name": "hl7-mllp",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "HL7 Minimum Lower Layer Protocol (MLLP) implementation for Node.js",
   "main": "build/hl7-mllp.min.js",
   "module": "build/hl7-mllp.min.js",
@@ -39,13 +39,12 @@
   },
   "homepage": "https://github.com/PantelisGeorgiadis/hl7-mllp",
   "dependencies": {
-    "async-eventemitter": "^0.2.4",
+    "async-event-emitter2": "^0.0.2",
     "dayjs": "^1.11.13",
     "loglevel": "^1.9.2",
     "loglevel-plugin-prefix": "^0.8.4"
   },
   "devDependencies": {
-    "@types/async-eventemitter": "^0.2.4",
     "@types/node": "^25.6.0",
     "c8": "^9.1.0",
     "chai": "^4.3.10",

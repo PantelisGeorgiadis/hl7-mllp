@@ -2,7 +2,7 @@ const { Hl7Message } = require('./Hl7');
 const Statistics = require('./Statistics');
 const log = require('./log');
 
-const AsyncEventEmitter = require('async-eventemitter');
+const AsyncEventEmitter2 = require('async-event-emitter2');
 
 //#region Constants
 /**
@@ -28,7 +28,7 @@ Object.freeze(Cr);
 //#endregion
 
 //#region Network
-class Network extends AsyncEventEmitter {
+class Network extends AsyncEventEmitter2 {
   /**
    * Creates an instance of Network.
    * @constructor
@@ -186,7 +186,7 @@ class Network extends AsyncEventEmitter {
 //#endregion
 
 //#region Hl7MessageProcessor
-class Hl7MessageProcessor extends AsyncEventEmitter {
+class Hl7MessageProcessor extends AsyncEventEmitter2 {
   /**
    * Creates an instance of Hl7MessageProcessor.
    * @constructor
